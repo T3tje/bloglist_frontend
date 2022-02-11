@@ -2,23 +2,23 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from "./services/login"
+import Toggleable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
   const [succMsg, setSuccMsg] = useState(null)
   const [errMsg, setErrMsg] = useState(null)
   
   
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    blogService.getAll().then(blogs => {
+      const sortedBlogs = blogs.sort((b,a) => a.likes - b.likes)
+      setBlogs(sortedBlogs) 
+    })  
   }, [])
 
   useEffect(() => {
@@ -63,14 +63,17 @@ const App = () => {
     setTimeout(() => setSuccMsg(null), 5000)
   }
 
-  const handlePost = async (event) => {
-    event.preventDefault()
+  const updateLike = (blogId, newObject) => {
+    blogService.update(blogId, newObject)
+    const blogWithoutNew = blogs.filter(blog => blog.id !== blogId)  
+    const newBlogList = blogWithoutNew.concat(newObject).sort((b,a) => a.likes - b.likes)
+    
+    setBlogs(newBlogList)   
+  }
+
+  const addBlog = async (blogObject) => {
     try {
-      const response = await blogService.create(
-          {
-            title, author, url
-          }
-        )
+      const response = await blogService.create(blogObject)
       const newBlogs = blogs.concat(response)
       setBlogs(newBlogs)
       setSuccMsg("blog succesfully added")
@@ -107,38 +110,18 @@ const App = () => {
     </div>
   )
 
-  const showName = () => (
+  const showBlogList = () => (
     <div>
       <p>{user.name} is logged in</p>
       <button type="button" onClick={handleLogout}>logout</button>
-      <h2>create new</h2>
-      <form onSubmit={handlePost}>
-        title:
-        <input
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-        author:
-        <input
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-        url:
-        <input
-          type="text"
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-        <button type="submit">create</button>
-
-      </form>
+      <Toggleable buttonLabel="new blog">
+      <BlogForm 
+        createNote={addBlog}
+      />
+      </Toggleable>
+      
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateLike={updateLike} />
       )}
     </div>
   )
@@ -150,7 +133,7 @@ const App = () => {
       <p style={{color: "red"}}>{errMsg}</p>
       {user === null
       ? showLogin()
-      : showName()
+      : showBlogList()
       }
     </div>
   )
