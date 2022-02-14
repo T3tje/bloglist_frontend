@@ -10,6 +10,9 @@ const BlogForm = ({ createNote }) => {
         createNote(
             {title, author, url}
         )
+        setTitle("")
+        setAuthor("")
+        setUrl("")
     }
 
     return(

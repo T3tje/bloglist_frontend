@@ -21,10 +21,19 @@ const create = async (newObject) => {
   return response.data
 }
 
+const remove = async (userId) => {
+  
+  const config = {
+    headers: {Authorization: token}
+  }
+  const response = await axios.delete(`${baseUrl}/${userId}`, config)
+  return response.data
+}
+
 const update = async (id, newObject) => {
   const response = await axios.put(`${baseUrl}/${id}`, newObject)
   return response.data
 }
 
-const exportVar = { getAll, setToken, create, update } 
+const exportVar = { getAll, setToken, create, update, remove } 
 export default exportVar

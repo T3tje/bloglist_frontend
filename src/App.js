@@ -74,7 +74,7 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       const response = await blogService.create(blogObject)
-      const newBlogs = blogs.concat(response)
+      const newBlogs = blogs.concat({...response, user})
       setBlogs(newBlogs)
       setSuccMsg("blog succesfully added")
       setTimeout(() => setSuccMsg(null), 5000)
@@ -82,6 +82,12 @@ const App = () => {
       setErrMsg("blog creation failed")
       setTimeout(() => setErrMsg(null), 5000)
     }
+  }
+
+  const handleDelete = async (blogId) => {
+    blogService.remove(blogId)
+    const newBloglist = blogs.filter(blog => blog.id !== blogId)
+    setBlogs(newBloglist)
   }
 
   const showLogin = () => (
@@ -121,7 +127,7 @@ const App = () => {
       </Toggleable>
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLike={updateLike} />
+        <Blog key={blog.id} blog={blog} updateLike={updateLike} user={user} handleDelete={handleDelete}/>
       )}
     </div>
   )
