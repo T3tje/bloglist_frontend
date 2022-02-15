@@ -1,13 +1,13 @@
 import React, { useState } from "react"
 
-const BlogForm = ({ createNote }) => {
+const BlogForm = ({ createBlog }) => {
    const [title, setTitle] = useState("")
    const [author, setAuthor] = useState("")
    const [url, setUrl] = useState("")
 
    const addBlog = (event) => {
       event.preventDefault()
-      createNote(
+      createBlog(
          { title, author, url }
       )
       setTitle("")
@@ -24,6 +24,7 @@ const BlogForm = ({ createNote }) => {
                type="text"
                value={title}
                name="Title"
+               id="titleInput"
                onChange={({ target }) => setTitle(target.value)}
             />
                 author:
@@ -31,6 +32,7 @@ const BlogForm = ({ createNote }) => {
                type="text"
                value={author}
                name="Author"
+               id="authorInput"
                onChange={({ target }) => setAuthor(target.value)}
             />
                 url:
@@ -38,9 +40,10 @@ const BlogForm = ({ createNote }) => {
                type="text"
                value={url}
                name="Url"
+               id="urlInput"
                onChange={({ target }) => setUrl(target.value)}
             />
-            <button type="submit">create</button>
+            <button type="submit" id="createButton">create</button>
 
          </form>
       </div>

@@ -122,7 +122,7 @@ const App = () => {
          <button type="button" onClick={handleLogout}>logout</button>
          <Toggleable buttonLabel="new blog">
             <BlogForm
-               createNote={addBlog}
+               createBlog={addBlog}
             />
          </Toggleable>
 
