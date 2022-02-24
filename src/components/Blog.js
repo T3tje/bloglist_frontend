@@ -46,7 +46,7 @@ const Blog = ({ blog, updateLike, user, handleDelete }) => {
       <div style={blogStyle}>
          <div style={hideWhenVisible} className="notVisible">
             <p>{blog.title}</p>
-            <button onClick={toggleVisibility} id="viewbutton">view</button>
+            <button onClick={toggleVisibility} className="view" id="viewbutton">view</button>
          </div>
 
          <div style={showWhenVisible} className="visible">
@@ -54,7 +54,7 @@ const Blog = ({ blog, updateLike, user, handleDelete }) => {
             <p>Title: {blog.title}</p>
             <p>Author: {blog.author}</p>
             <p>Url: {blog.url}</p>
-            <p>Likes: {blogLikes}</p>
+            <div><p>Likes: </p><p className="likes">{blogLikes}</p></div>
             <button onClick={addLike} id="likeButton">like</button>
             {blog.user.name === user.name
                ? <button onClick={removeBlog}>delete</button>

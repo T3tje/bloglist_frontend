@@ -76,7 +76,7 @@ const App = () => {
          const response = await blogService.create(blogObject)
          const newBlogs = blogs.concat({ ...response, user })
          setBlogs(newBlogs)
-         setSuccMsg("blog succesfully added")
+         setSuccMsg("blog successfully added")
          setTimeout(() => setSuccMsg(null), 5000)
       } catch {
          setErrMsg("blog creation failed")
@@ -93,13 +93,14 @@ const App = () => {
    const showLogin = () => (
       <div>
          <h2>Log in to application</h2>
-         <form onSubmit={handleLogin}>
+         <form onSubmit={handleLogin} id="loginForm">
             <div>
           username
                <input
                   type="text"
                   value={username}
                   name="Username"
+                  id="username"
                   onChange={({ target }) => setUsername(target.value)}
                />
           password
@@ -107,9 +108,10 @@ const App = () => {
                   type="password"
                   value={password}
                   name="Password"
+                  id="password"
                   onChange={({ target }) => setPassword(target.value)}
                />
-               <button type="submit">login</button>
+               <button type="submit" id="loginButton">login</button>
             </div>
 
          </form>
@@ -135,8 +137,8 @@ const App = () => {
    return(
       <div>
          <h2>blogs</h2>
-         <p style={{ color:"green" }}>{succMsg}</p>
-         <p style={{ color: "red" }}>{errMsg}</p>
+         <p className="success" style={{ color:"green" }}>{succMsg}</p>
+         <p className="error" style={{ color: "red" }}>{errMsg}</p>
          {user === null
             ? showLogin()
             : showBlogList()
